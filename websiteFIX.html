@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI untuk Ekonomi Inklusif Indonesia</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; color: #333; overflow-x: hidden; }
+        
+        /* Navbar */
+        .navbar { position: fixed; top: 0; width: 100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); z-index: 1000; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .navbar .logo { color: #fff; font-size: 1.4rem; font-weight: 700; }
+        .navbar .logo span { color: #38bdf8; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: #cbd5e1; text-decoration: none; font-size: 0.95rem; transition: color 0.3s; }
+        .nav-links a:hover { color: #38bdf8; }
+
+        /* Hero */
+        .hero { min-height: 100vh; background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%); display: flex; align-items: center; justify-content: center; text-align: center; padding: 6rem 2rem 4rem; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(56,189,248,0.15), transparent 70%); top: -100px; right: -100px; border-radius: 50%; }
+        .hero h1 { color: #fff; font-size: 3.2rem; margin-bottom: 1.5rem; line-height: 1.2; }
+        .hero h1 span { background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: #94a3b8; font-size: 1.2rem; max-width: 700px; margin: 0 auto 2rem; }
+        .hero-btn { display: inline-block; padding: 0.9rem 2.5rem; background: linear-gradient(135deg, #38bdf8, #818cf8); color: #fff; border-radius: 50px; text-decoration: none; font-weight: 600; transition: transform 0.3s, box-shadow 0.3s; }
+        .hero-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(56,189,248,0.3); }
+
+        /* Stats */
+        .stats-bar { background: #1e293b; padding: 3rem 2rem; display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap; }
+        .stat-item { text-align: center; }
+        .stat-item .number { font-size: 2.5rem; font-weight: 700; color: #38bdf8; }
+        .stat-item .label { color: #94a3b8; font-size: 0.9rem; margin-top: 0.3rem; }
+
+        /* Animated Gradients */
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes colorCycle { 0% { color: #38bdf8; } 33% { color: #818cf8; } 66% { color: #f472b6; } 100% { color: #38bdf8; } }
+
+        .stat-item .number { animation: colorCycle 4s infinite; }
+        .hero-btn { background-size: 200% 200%; animation: gradientShift 3s ease infinite; background: linear-gradient(135deg, #38bdf8, #818cf8, #f472b6, #38bdf8); background-size: 300% 300%; }
+        .about-card:hover .icon { animation: pulse 0.6s ease; }
+        .chart-card { animation: fadeInUp 0.6s ease forwards; transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; }
+        .chart-card:hover { transform: translateY(-5px); box-shadow: 0 8px 30px rgba(56,189,248,0.15); border-color: #38bdf8; }
+
+        /* Sections */
+        section { padding: 5rem 2rem; }
+        .section-title { text-align: center; font-size: 2.2rem; margin-bottom: 1rem; color: #0f172a; }
+        .section-subtitle { text-align: center; color: #64748b; max-width: 600px; margin: 0 auto 3rem; }
+
+        /* About */
+        .about { background: #f8fafc; }
+        .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 1100px; margin: 0 auto; }
+        .about-card { background: #fff; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: transform 0.3s; }
+        .about-card:hover { transform: translateY(-5px); }
+        .about-card .icon { width: 50px; height: 50px; background: linear-gradient(135deg, #38bdf8, #818cf8); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.3rem; margin-bottom: 1rem; }
+        .about-card h3 { margin-bottom: 0.7rem; color: #1e293b; }
+        .about-card p { color: #64748b; font-size: 0.95rem; line-height: 1.6; }
+
+        /* Dashboard */
+        .dashboard { background: #fff; }
+        .dashboard-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .chart-card { background: #f8fafc; border-radius: 16px; padding: 2rem; border: 1px solid #e2e8f0; }
+        .chart-card h4 { margin-bottom: 1rem; color: #1e293b; }
+        .chart-placeholder { width: 100%; height: 200px; background: linear-gradient(135deg, #e0f2fe, #ede9fe); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.9rem; }
+
+        /* News */
+        .news { background: #f8fafc; }
+        .news-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+        .news-card { background: #fff; border-radius: 16px; padding: 1.8rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; border-left: 4px solid #38bdf8; }
+        .news-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .news-card .category { display: inline-block; background: linear-gradient(135deg, #38bdf8, #818cf8); color: #fff; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.8rem; }
+        .news-card h4 { color: #1e293b; margin-bottom: 0.5rem; font-size: 1rem; line-height: 1.4; }
+        .news-card a { color: #38bdf8; text-decoration: none; font-size: 0.85rem; font-weight: 600; }
+        .news-card a:hover { text-decoration: underline; }
+
+        /* Quiz */
+        .quiz { background: #fff; }
+        .quiz-container { max-width: 700px; margin: 0 auto; background: linear-gradient(135deg, #0f172a, #1e3a5f); border-radius: 20px; padding: 3rem; color: #fff; }
+        .quiz-container h3 { margin-bottom: 1.5rem; }
+        .quiz-option { display: block; width: 100%; padding: 1rem; margin-bottom: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; color: #fff; cursor: pointer; text-align: left; font-size: 0.95rem; transition: background 0.3s; }
+        .quiz-option:hover { background: rgba(56,189,248,0.3); }
+        .quiz-option.correct { background: rgba(34,197,94,0.4); border-color: #22c55e; }
+        .quiz-option.wrong { background: rgba(239,68,68,0.4); border-color: #ef4444; }
+        #quiz-result { margin-top: 1rem; font-weight: 600; min-height: 1.5rem; }
+
+        /* Footer */
+        .footer { background: #0f172a; color: #94a3b8; padding: 3rem 2rem; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2rem; max-width: 1200px; margin: 0 auto; padding-bottom: 2rem; border-bottom: 1px solid #1e293b; }
+        .footer-brand h3 { color: #fff; font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; }
+        .footer-brand h3 span { color: #38bdf8; }
+        .footer-brand p { font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem; }
+        .footer-sdg-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .footer-sdg-tags span { padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; color: #fff; }
+        .footer-sdg-tags .sdg1 { background: #e5243b; }
+        .footer-sdg-tags .sdg8 { background: #a21942; }
+        .footer-sdg-tags .sdg10 { background: #dd1367; }
+        .footer-nav h4, .footer-data h4 { color: #fff; font-size: 1rem; font-weight: 600; margin-bottom: 1rem; }
+        .footer-nav a, .footer-data span { display: block; font-size: 0.9rem; margin-bottom: 0.5rem; color: #94a3b8; text-decoration: none; }
+        .footer-nav a:hover { color: #38bdf8; }
+        .footer-bottom { text-align: center; padding-top: 1.5rem; font-size: 0.8rem; max-width: 1200px; margin: 0 auto; }
+        @media(max-width:768px) { .footer-grid { grid-template-columns: 1fr; } }
+
+        /* AI Chat Popup */
+        .chat-toggle { position: fixed; bottom: 2rem; right: 2rem; width: 60px; height: 60px; background: linear-gradient(135deg, #38bdf8, #818cf8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 20px rgba(56,189,248,0.4); z-index: 999; transition: transform 0.3s; }
+        .chat-toggle:hover { transform: scale(1.1); }
+        .chat-popup { position: fixed; bottom: 6rem; right: 2rem; width: 350px; max-height: 450px; background: #fff; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); z-index: 999; display: none; flex-direction: column; overflow: hidden; }
+        .chat-popup.active { display: flex; }
+        .chat-header { background: linear-gradient(135deg, #0f172a, #1e3a5f); color: #fff; padding: 1rem 1.5rem; font-weight: 600; }
+        .chat-body { flex: 1; padding: 1rem; overflow-y: auto; max-height: 300px; }
+        .chat-msg { margin-bottom: 0.8rem; padding: 0.7rem 1rem; border-radius: 12px; font-size: 0.9rem; max-width: 85%; }
+        .chat-msg.bot { background: #f1f5f9; color: #334155; }
+        .chat-msg.user { background: linear-gradient(135deg, #38bdf8, #818cf8); color: #fff; margin-left: auto; }
+        .chat-input-area { display: flex; border-top: 1px solid #e2e8f0; }
+        .chat-input-area input { flex: 1; border: none; padding: 1rem; font-size: 0.9rem; outline: none; }
+        .chat-input-area button { background: #38bdf8; border: none; color: #fff; padding: 0 1.2rem; cursor: pointer; font-size: 1.1rem; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .nav-links { display: none; }
+            .stats-bar { gap: 2rem; }
+            .chat-popup { width: 90%; right: 5%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">AI<span>nklusif</span></div>
+        <ul class="nav-links">
+            <li><a href="#hero">Beranda</a></li>
+            <li><a href="#about">Tentang</a></li>
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#news">Berita</a></li>
+            <li><a href="#quiz">Kuis</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <div>
+            <h1>AI untuk <span>Ekonomi Inklusif</span> Indonesia</h1>
+            <p style="font-size: 0.9rem; font-style: italic; opacity: 0.85; margin-top: -0.8rem; margin-bottom: 1.2rem;">by Ferdy Ardhitya Nugraha</p>
+            <p>Mengeksplorasi peran kecerdasan buatan dalam mewujudkan ekonomi yang adil, merata, dan berkelanjutan bagi seluruh rakyat Indonesia.</p>
+            <a href="#about" class="hero-btn">Pelajari Lebih Lanjut</a>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+        <div class="stat-item"><div class="number">75.6%</div><div class="label">Inklusi Keuangan 2024</div></div>
+        <div class="stat-item"><div class="number">64.8 Juta</div><div class="label">UMKM di Indonesia</div></div>
+        <div class="stat-item"><div class="number">49 Juta</div><div class="label">Pengguna QRIS</div></div>
+        <div class="stat-item"><div class="number">44.53</div><div class="label">Indeks Literasi Digital 2025</div></div>
+    </div>
+
+    <!-- About -->
+    <section class="about" id="about">
+        <h2 class="section-title">Peran AI dalam Ekonomi Inklusif</h2>
+        <p class="section-subtitle">Kecerdasan buatan membuka peluang baru untuk menjangkau masyarakat yang belum terlayani sistem keuangan tradisional.</p>
+        <div class="about-grid">
+            <div class="about-card">
+                <div class="icon"><i class="fas fa-wallet"></i></div>
+                <h3>Inklusi Keuangan Digital</h3>
+                <p>AI memungkinkan credit scoring alternatif, membuka akses pinjaman bagi masyarakat unbanked melalui analisis data non-tradisional.</p>
+            </div>
+            <div class="about-card">
+                <div class="icon"><i class="fas fa-store"></i></div>
+                <h3>Pemberdayaan UMKM</h3>
+                <p>Chatbot AI, analitik penjualan, dan otomatisasi pemasaran membantu UMKM bersaing di era digital tanpa biaya tinggi.</p>
+            </div>
+            <div class="about-card">
+                <div class="icon"><i class="fas fa-hand-holding-heart"></i></div>
+                <h3>Pengentasan Kemiskinan</h3>
+                <p>Prediksi berbasis AI membantu pemerintah menyalurkan bantuan sosial secara tepat sasaran dan efisien.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard -->
+    <section class="dashboard" id="dashboard">
+        <h2 class="section-title">Dashboard Data</h2>
+        <p class="section-subtitle">Visualisasi indikator inklusi keuangan dan perkembangan ekonomi digital Indonesia.</p>
+        <div class="dashboard-container">
+            <div class="chart-card">
+                <h4>Pertumbuhan Inklusi Keuangan</h4>
+                <div class="chart-placeholder" id="chart1">
+                    <canvas id="inclusionChart"></canvas>
+                </div>
+                <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem;">Sumber: <a href="https://ojk.go.id/id/berita-dan-kegiatan/publikasi/Pages/Survei-Nasional-Literasi-dan-Inklusi-Keuangan-(SNLIK)-2024.aspx" target="_blank" style="color:#38bdf8;">OJK SNLIK 2016–2024</a></p>
+            </div>
+            <div class="chart-card">
+                <h4>Adopsi Pembayaran Digital (QRIS)</h4>
+                <div class="chart-placeholder" id="chart2">
+                    <canvas id="digitalChart"></canvas>
+                </div>
+                <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem;">Sumber: <a href="https://www.bi.go.id/id/publikasi/ruang-media/news-release/Pages/sp_2512123.aspx" target="_blank" style="color:#38bdf8;">Bank Indonesia 2024</a></p>
+            </div>
+            <div class="chart-card">
+                <h4>Pertumbuhan UMKM Digital</h4>
+                <div class="chart-placeholder" id="chart3">
+                    <canvas id="umkmChart"></canvas>
+                </div>
+                <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem;">Sumber: <a href="https://www.kemenkeu.go.id/informasi-publik/publikasi/berita-utama/Pemerintah-Terus-Dorong-Digitalisasi-pada-UMKM" target="_blank" style="color:#38bdf8;">Kemenkeu — Digitalisasi UMKM 2024</a></p>
+            </div>
+            <div class="chart-card">
+                <h4>Indeks Literasi Digital Indonesia</h4>
+                <div class="chart-placeholder" id="chart4">
+                    <canvas id="literasiChart"></canvas>
+                </div>
+                <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem;">Sumber: <a href="https://www.komdigi.go.id/berita/siaran-pers/detail/imdi-2025-naik-ke-4453-indonesia-makin-cakap-digital" target="_blank" style="color:#38bdf8;">Komdigi IMDI 2021–2025</a></p>
+            </div>
+            <div class="chart-card">
+                <h4>Penyaluran KUR untuk UMKM (Triliun Rp)</h4>
+                <div class="chart-placeholder" id="chart5">
+                    <canvas id="kurChart"></canvas>
+                </div>
+                <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem;">Sumber: <a href="https://www.kemenkeu.go.id/informasi-publik/publikasi/berita-utama/pengembangan-umkm-dorong-pertumbuhan-ekonomi" target="_blank" style="color:#38bdf8;">Kemenkeu 2024</a></p>
+            </div>
+            <div class="chart-card">
+                <h4>Penetrasi Internet Indonesia</h4>
+                <div class="chart-placeholder" id="chart6">
+                    <canvas id="internetChart"></canvas>
+                </div>
+                <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem;">Sumber: <a href="https://literasidigital.id/" target="_blank" style="color:#38bdf8;">APJII & Literasi Digital 2024</a></p>
+            </div>
+        </div>
+
+        <!-- Regional Infographics -->
+        <h3 style="text-align:center;margin-top:4rem;margin-bottom:0.5rem;color:#0f172a;font-size:1.6rem;">Data Regional per Pulau / Provinsi</h3>
+        <p style="text-align:center;color:#64748b;max-width:650px;margin:0 auto 2rem;font-size:0.95rem;">Perbandingan indikator ekonomi inklusif dan digital antar wilayah Indonesia.</p>
+        <div class="dashboard-container">
+            <div class="chart-card">
+                <h4>Inklusi Keuangan per Pulau (%)</h4>
+                <div class="chart-placeholder"><canvas id="regionalInklusi"></canvas></div>
+                <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem;">Sumber: <a href="https://ojk.go.id/id/berita-dan-kegiatan/publikasi/Pages/Survei-Nasional-Literasi-dan-Inklusi-Keuangan-(SNLIK)-2024.aspx" target="_blank" style="color:#38bdf8;">OJK SNLIK 2024</a></p>
+            </div>
+            <div class="chart-card">
+                <h4>Penetrasi Internet per Pulau (%)</h4>
+                <div class="chart-placeholder"><canvas id="regionalInternet"></canvas></div>
+                <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem;">Sumber: <a href="https://literasidigital.id/" target="_blank" style="color:#38bdf8;">APJII 2024</a></p>
+            </div>
+            <div class="chart-card">
+                <h4>Jumlah UMKM per Pulau (Juta)</h4>
+                <div class="chart-placeholder"><canvas id="regionalUMKM"></canvas></div>
+                <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem;">Sumber: <a href="https://www.kemenkeu.go.id/informasi-publik/publikasi/berita-utama/pengembangan-umkm-dorong-pertumbuhan-ekonomi" target="_blank" style="color:#38bdf8;">Kemenkeu & Kemenkop 2024</a></p>
+            </div>
+            <div class="chart-card">
+                <h4>Adopsi QRIS per Provinsi (Top 10)</h4>
+                <div class="chart-placeholder"><canvas id="regionalQRIS"></canvas></div>
+                <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem;">Sumber: <a href="https://www.bi.go.id/id/publikasi/ruang-media/news-release/Pages/sp_2512123.aspx" target="_blank" style="color:#38bdf8;">Bank Indonesia 2024</a></p>
+            </div>
+            <div class="chart-card">
+                <h4>Literasi Digital per Pulau (Indeks)</h4>
+                <div class="chart-placeholder"><canvas id="regionalLiterasi"></canvas></div>
+                <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem;">Sumber: <a href="https://www.komdigi.go.id/berita/siaran-pers/detail/imdi-2025-naik-ke-4453-indonesia-makin-cakap-digital" target="_blank" style="color:#38bdf8;">Komdigi IMDI 2025</a></p>
+            </div>
+            <div class="chart-card">
+                <h4>Penyaluran KUR per Provinsi (Top 10, Triliun Rp)</h4>
+                <div class="chart-placeholder"><canvas id="regionalKUR"></canvas></div>
+                <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem;">Sumber: <a href="https://www.kemenkeu.go.id/informasi-publik/publikasi/berita-utama/Pemerintah-Terus-Dorong-Digitalisasi-pada-UMKM" target="_blank" style="color:#38bdf8;">Kemenkeu 2024</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- News -->
+    <section class="news" id="news">
+        <h2 class="section-title">Berita Terkini</h2>
+        <p class="section-subtitle">Perkembangan terbaru seputar ekonomi inklusif, digitalisasi, dan AI di Indonesia.</p>
+        <div class="news-grid">
+            <!-- BI - QRIS -->
+            <div class="news-card">
+                <span class="category">Bank Indonesia</span>
+                <h4>Siaran Pers BI: Pembayaran Lintas Negara</h4>
+                <a href="https://www.bi.go.id/id/publikasi/ruang-media/news-release/Pages/sp_2512123.aspx" target="_blank">Baca selengkapnya →</a>
+            </div>
+            <div class="news-card">
+                <span class="category">Bank Indonesia</span>
+                <h4>QRIS Cross-Border: Digitalisasi Pembayaran Antarnegara</h4>
+                <a href="https://www.bi.go.id/id/publikasi/ruang-media/cerita-bi/Pages/qris-cross-border-pembayaran-antarnegara.aspx" target="_blank">Baca selengkapnya →</a>
+            </div>
+            <div class="news-card">
+                <span class="category">Bank Indonesia</span>
+                <h4>Win-Win Solution QRIS Cross-Border</h4>
+                <a href="https://www.bi.go.id/id/publikasi/ruang-media/cerita-bi/Pages/win-win-solution-qris-cross-border.aspx" target="_blank">Baca selengkapnya →</a>
+            </div>
+            <!-- OJK -->
+            <div class="news-card">
+                <span class="category">OJK</span>
+                <h4>Survei Nasional Literasi dan Inklusi Keuangan (SNLIK) 2024</h4>
+                <a href="https://ojk.go.id/id/berita-dan-kegiatan/publikasi/Pages/Survei-Nasional-Literasi-dan-Inklusi-Keuangan-(SNLIK)-2024.aspx" target="_blank">Baca selengkapnya →</a>
+            </div>
+            <div class="news-card">
+                <span class="category">OJK</span>
+                <h4>SNLIK 2025</h4>
+                <a href="https://ojk.go.id/id/Fungsi-Utama/Perilaku-Pelaku-Usaha-Jasa-Keuangan/SNLIK/Pages/SNLIK-2025.aspx" target="_blank">Baca selengkapnya →</a>
+            </div>
+            <div class="news-card">
+                <span class="category">OJK</span>
+                <h4>Indeks Inklusi Keuangan Meningkat</h4>
+                <a href="https://ojk.go.id/id/Publikasi/E-Magazine/Documents/Majalah%20Edukasi%20Konsumen%20Tw%20II%202025.pdf" target="_blank">Baca selengkapnya →</a>
+            </div>
+            <!-- Kemenkeu -->
+            <div class="news-card">
+                <span class="category">Kemenkeu</span>
+                <h4>Pemerintah Terus Dorong Digitalisasi pada UMKM</h4>
+                <a href="https://www.kemenkeu.go.id/informasi-publik/publikasi/berita-utama/Pemerintah-Terus-Dorong-Digitalisasi-pada-UMKM" target="_blank">Baca selengkapnya →</a>
+            </div>
+            <div class="news-card">
+                <span class="category">Kemenkeu</span>
+                <h4>Pengembangan UMKM Dorong Pertumbuhan Ekonomi</h4>
+                <a href="https://www.kemenkeu.go.id/informasi-publik/publikasi/berita-utama/pengembangan-umkm-dorong-pertumbuhan-ekonomi" target="_blank">Baca selengkapnya →</a>
+            </div>
+            <div class="news-card">
+                <span class="category">Kemenkeu</span>
+                <h4>Analisis Efektivitas Transformasi Digital UMKM</h4>
+                <a href="https://djpb.kemenkeu.go.id/kppn/watampone/id/profil/309-artikel/3712-analisis-efektivitas-paket-kebijakan-ekonomi-terhadap-transformasi-digital-umkm.html" target="_blank">Baca selengkapnya →</a>
+            </div>
+            <!-- AI & UMKM -->
+            <div class="news-card">
+                <span class="category">AI & UMKM</span>
+                <h4>AI Dorong Efisiensi dan Pertumbuhan UMKM di Tahun 2025</h4>
+                <a href="https://pgsd.fip.unesa.ac.id/post/ai-dorong-efisiensi-dan-pertumbuhan-umkm-di-tahun-2025" target="_blank">Baca selengkapnya →</a>
+            </div>
+            <!-- Literasi Digital -->
+            <div class="news-card">
+                <span class="category">Komdigi</span>
+                <h4>IMDI 2025 Naik ke 44,53 — Indonesia Makin Cakap Digital</h4>
+                <a href="https://www.komdigi.go.id/berita/siaran-pers/detail/imdi-2025-naik-ke-4453-indonesia-makin-cakap-digital" target="_blank">Baca selengkapnya →</a>
+            </div>
+            <div class="news-card">
+                <span class="category">Komdigi</span>
+                <h4>Program Literasi Digital Indonesia</h4>
+                <a href="https://literasidigital.id/" target="_blank">Baca selengkapnya →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz -->
+    <section class="quiz" id="quiz">
+        <h2 class="section-title" style="color:#fff;">Uji Pemahamanmu</h2>
+        <p class="section-subtitle" style="color:#94a3b8;">Seberapa dalam pengetahuanmu tentang ekonomi inklusif?</p>
+        <div class="quiz-container">
+            <p id="quiz-progress" style="font-size:0.85rem;color:#94a3b8;margin-bottom:1rem;">Soal 1 dari 8</p>
+            <h3 id="quiz-question"></h3>
+            <div id="quiz-options"></div>
+            <div id="quiz-result"></div>
+            <button id="quiz-next" style="display:none;margin-top:1rem;padding:0.8rem 2rem;background:#38bdf8;border:none;border-radius:10px;color:#fff;font-weight:600;cursor:pointer;" onclick="nextQuestion()">Soal Berikutnya →</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>AI for SDGs — Ekonomi Inklusif</h3>
+                <p>Website interaktif yang menampilkan peran kecerdasan buatan dalam mendorong ekonomi inklusif di Indonesia. Proyek open-source untuk tugas mahasiswa.</p>
+                <div class="footer-sdg-tags">
+                    <span class="sdg1">SDG #1 No Poverty</span>
+                    <span class="sdg8">SDG #8 Decent Work</span>
+                    <span class="sdg10">SDG #10 Reduced Inequalities</span>
+                </div>
+            </div>
+            <div class="footer-nav">
+                <h4>Navigasi</h4>
+                <a href="#tentang">Tentang AI</a>
+                <a href="#dashboard">Dashboard Data</a>
+                <a href="#berita">Berita</a>
+                <a href="#quiz">Quiz Interaktif</a>
+            </div>
+            <div class="footer-data">
+                <h4>Sumber Data</h4>
+                <span>Bank Indonesia</span>
+                <span>OJK (Otoritas Jasa Keuangan)</span>
+                <span>BPS (Badan Pusat Statistik)</span>
+                <span>Kemenkop UKM</span>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 AI for SDGs — Ekonomi Inklusif Indonesia | Open Source Project | MIT License</p>
+        </div>
+    </footer>
+
+    <!-- Chat Toggle -->
+    <div class="chat-toggle" onclick="toggleChat()"><i class="fas fa-robot"></i></div>
+    <div class="chat-popup" id="chatPopup">
+        <div class="chat-header">🤖 AI Assistant — Ekonomi Inklusif</div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-msg bot">Halo! Saya asisten AI. Tanyakan apa saja tentang ekonomi inklusif Indonesia!</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Ketik pertanyaan..." onkeypress="if(event.key==='Enter')sendChat()">
+            <button onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script>
+        // Charts
+        const ctx1 = document.getElementById('inclusionChart');
+        if(ctx1) {
+            new Chart(ctx1, {
+                type: 'line',
+                data: { labels: ['2016','2019','2022','2024'], datasets: [{ label: 'Inklusi Keuangan (%)', data: [67.8, 76.2, 85.1, 75.6], borderColor: '#38bdf8', backgroundColor: 'rgba(56,189,248,0.1)', fill: true, tension: 0.4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false, min: 60 } } }
+            });
+        }
+        const ctx2 = document.getElementById('digitalChart');
+        if(ctx2) {
+            new Chart(ctx2, {
+                type: 'bar',
+                data: { labels: ['2020','2021','2022','2023','2024'], datasets: [{ label: 'Pengguna QRIS (Juta)', data: [6, 12, 26, 38, 49], backgroundColor: ['#38bdf8','#818cf8','#38bdf8','#818cf8','#38bdf8'], borderRadius: 8 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+
+        // UMKM Chart
+        const ctx3 = document.getElementById('umkmChart');
+        if(ctx3) {
+            new Chart(ctx3, {
+                type: 'bar',
+                data: { labels: ['2019','2020','2021','2022','2023','2024'], datasets: [{ label: 'UMKM Go-Digital (Juta)', data: [8, 13, 19, 24, 30, 36], backgroundColor: '#818cf8', borderRadius: 8 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+        // Literasi Digital Chart
+        const ctx4 = document.getElementById('literasiChart');
+        if(ctx4) {
+            new Chart(ctx4, {
+                type: 'line',
+                data: { labels: ['2021','2022','2023','2024','2025'], datasets: [{ label: 'Indeks Literasi Digital', data: [3.49, 3.54, 3.65, 4.0, 4.453], borderColor: '#f472b6', backgroundColor: 'rgba(244,114,182,0.1)', fill: true, tension: 0.4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false, min: 3 } } }
+            });
+        }
+        // KUR Chart
+        const ctx5 = document.getElementById('kurChart');
+        if(ctx5) {
+            new Chart(ctx5, {
+                type: 'bar',
+                data: { labels: ['2020','2021','2022','2023','2024'], datasets: [{ label: 'KUR (Triliun Rp)', data: [190, 253, 285, 297, 320], backgroundColor: ['#22c55e','#38bdf8','#818cf8','#f472b6','#f59e0b'], borderRadius: 8 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+        // Internet Penetration Chart
+        const ctx6 = document.getElementById('internetChart');
+        if(ctx6) {
+            new Chart(ctx6, {
+                type: 'doughnut',
+                data: { labels: ['Terkoneksi Internet','Belum Terkoneksi'], datasets: [{ data: [79.5, 20.5], backgroundColor: ['#38bdf8','#e2e8f0'], borderWidth: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        // Regional Charts
+        // 1. Inklusi Keuangan per Pulau
+        new Chart(document.getElementById('regionalInklusi'), {
+            type: 'bar',
+            data: { labels: ['Jawa','Sumatera','Kalimantan','Sulawesi','Bali & Nusa Tenggara','Papua & Maluku'], datasets: [{ label: 'Inklusi (%)', data: [83.5, 72.1, 68.4, 65.7, 70.2, 52.3], backgroundColor: ['#6366f1','#f59e0b','#10b981','#ef4444','#8b5cf6','#06b6d4'] }] },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } }
+        });
+        // 2. Penetrasi Internet per Pulau
+        new Chart(document.getElementById('regionalInternet'), {
+            type: 'bar',
+            data: { labels: ['Jawa','Sumatera','Kalimantan','Sulawesi','Bali & NT','Papua & Maluku'], datasets: [{ label: 'Penetrasi (%)', data: [82.1, 71.3, 72.8, 66.5, 73.4, 48.6], backgroundColor: ['#6366f1','#f59e0b','#10b981','#ef4444','#8b5cf6','#06b6d4'] }] },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } }
+        });
+        // 3. Jumlah UMKM per Pulau
+        new Chart(document.getElementById('regionalUMKM'), {
+            type: 'bar',
+            data: { labels: ['Jawa','Sumatera','Kalimantan','Sulawesi','Bali & NT','Papua & Maluku'], datasets: [{ label: 'Juta unit', data: [36.2, 12.8, 4.9, 5.1, 3.7, 1.5], backgroundColor: ['#6366f1','#f59e0b','#10b981','#ef4444','#8b5cf6','#06b6d4'] }] },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+        // 4. Adopsi QRIS per Provinsi (Top 10)
+        new Chart(document.getElementById('regionalQRIS'), {
+            type: 'horizontalBar' === 'horizontalBar' ? 'bar' : 'bar',
+            data: { labels: ['DKI Jakarta','Jawa Barat','Jawa Timur','Jawa Tengah','Bali','Sumatera Utara','Sulawesi Selatan','Kalimantan Timur','Yogyakarta','Sumatera Barat'], datasets: [{ label: 'Juta transaksi/bln', data: [85.2, 62.4, 55.8, 48.1, 42.6, 28.3, 22.7, 18.5, 17.9, 15.2], backgroundColor: '#6366f1' }] },
+            options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } } }
+        });
+        // 5. Literasi Digital per Pulau (Indeks 1-5)
+        new Chart(document.getElementById('regionalLiterasi'), {
+            type: 'radar',
+            data: { labels: ['Jawa','Sumatera','Kalimantan','Sulawesi','Bali & NT','Papua & Maluku'], datasets: [{ label: 'Indeks', data: [3.85, 3.42, 3.28, 3.15, 3.52, 2.74], backgroundColor: 'rgba(99,102,241,0.2)', borderColor: '#6366f1', pointBackgroundColor: '#6366f1' }] },
+            options: { responsive: true, scales: { r: { min: 0, max: 5 } } }
+        });
+        // 6. Penyaluran KUR per Provinsi (Top 10)
+        new Chart(document.getElementById('regionalKUR'), {
+            type: 'bar',
+            data: { labels: ['Jawa Timur','Jawa Tengah','Jawa Barat','Sumatera Utara','Sulawesi Selatan','Lampung','NTB','Bali','Kalimantan Selatan','NTT'], datasets: [{ label: 'Triliun Rp', data: [52.3, 48.7, 44.1, 22.5, 18.3, 15.8, 12.1, 11.6, 10.4, 9.8], backgroundColor: '#10b981' }] },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Quiz - 8 Questions, 12.5 points each
+        const quizData = [
+            { q: "Apa tujuan utama inklusi keuangan?", options: ["Memberikan akses layanan keuangan bagi seluruh lapisan masyarakat", "Meningkatkan keuntungan perbankan", "Mengurangi jumlah bank di Indonesia", "Membatasi transaksi digital"], answer: 0 },
+            { q: "Berapa target indeks inklusi keuangan Indonesia tahun 2024?", options: ["75%", "90%", "50%", "65%"], answer: 1 },
+            { q: "Apa kepanjangan dari QRIS?", options: ["Quick Response Code Indonesian Standard", "Quality Resource Information System", "Quantum Response Integrated Service", "Quick Reliable Internet Standard"], answer: 0 },
+            { q: "Apa peran utama AI dalam ekonomi inklusif?", options: ["Menggantikan seluruh tenaga kerja manusia", "Menganalisis data untuk memperluas akses layanan keuangan", "Menghapus sistem perbankan tradisional", "Membatasi akses internet"], answer: 1 },
+            { q: "Apa itu KUR?", options: ["Kredit Usaha Rakyat untuk mendukung UMKM", "Kartu Uang Rupiah untuk transaksi digital", "Kebijakan Umum Reformasi ekonomi", "Komisi Usaha dan Regulasi keuangan"], answer: 0 },
+            { q: "Lembaga mana yang mengatur inklusi keuangan di Indonesia?", options: ["OJK (Otoritas Jasa Keuangan)", "KPK", "Mahkamah Konstitusi", "BPS"], answer: 0 },
+            { q: "Apa manfaat utama digitalisasi UMKM?", options: ["Memperluas jangkauan pasar dan efisiensi operasional", "Menghilangkan kebutuhan modal usaha", "Mengurangi jumlah UMKM di Indonesia", "Membatasi produk lokal"], answer: 0 },
+            { q: "Indeks literasi digital Indonesia (IMDI) 2025 mencapai berapa?", options: ["44,53", "30,00", "60,75", "55,20"], answer: 0 }
+        ];
+        let currentQ = 0, quizScore = 0, answered = false;
+        function loadQuestion() {
+            const data = quizData[currentQ];
+            document.getElementById('quiz-progress').textContent = `Soal ${currentQ + 1} dari 8`;
+            document.getElementById('quiz-question').textContent = data.q;
+            document.getElementById('quiz-result').textContent = '';
+            document.getElementById('quiz-next').style.display = 'none';
+            answered = false;
+            const optDiv = document.getElementById('quiz-options');
+            optDiv.innerHTML = '';
+            data.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.textContent = opt;
+                btn.onclick = () => selectAnswer(btn, i);
+                optDiv.appendChild(btn);
+            });
+        }
+        function selectAnswer(btn, idx) {
+            if (answered) return;
+            answered = true;
+            const btns = document.querySelectorAll('#quiz-options .quiz-option');
+            btns.forEach(b => b.disabled = true);
+            if (idx === quizData[currentQ].answer) {
+                btn.classList.add('correct');
+                quizScore += 12.5;
+                document.getElementById('quiz-result').textContent = '✅ Benar! +12.5 poin';
+            } else {
+                btn.classList.add('wrong');
+                btns[quizData[currentQ].answer].classList.add('correct');
+                document.getElementById('quiz-result').textContent = '❌ Kurang tepat.';
+            }
+            if (currentQ < 7) { document.getElementById('quiz-next').style.display = 'inline-block'; }
+            else { document.getElementById('quiz-result').textContent += ` | Skor akhir: ${quizScore}/100`; document.getElementById('quiz-next').textContent = '🔄 Ulangi Kuis'; document.getElementById('quiz-next').style.display = 'inline-block'; }
+        }
+        function nextQuestion() {
+            if (currentQ >= 7) { currentQ = 0; quizScore = 0; document.getElementById('quiz-next').textContent = 'Soal Berikutnya →'; }
+            else { currentQ++; }
+            loadQuestion();
+        }
+        loadQuestion();
+
+        // Chat
+        function toggleChat() { document.getElementById('chatPopup').classList.toggle('active'); }
+        function sendChat() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if(!msg) return;
+            const body = document.getElementById('chatBody');
+            body.innerHTML += `<div class="chat-msg user">${msg}</div>`;
+            input.value = '';
+            setTimeout(() => {
+                let reply = 'Terima kasih atas pertanyaannya! Ekonomi inklusif bertujuan agar semua lapisan masyarakat dapat menikmati pertumbuhan ekonomi secara merata melalui akses keuangan digital, pemberdayaan UMKM, dan literasi digital.';
+                if(msg.toLowerCase().includes('qris')) reply = 'QRIS adalah standar QR code pembayaran nasional dari Bank Indonesia yang memudahkan transaksi digital, termasuk lintas negara (cross-border).';
+                else if(msg.toLowerCase().includes('umkm')) reply = 'AI membantu UMKM melalui otomatisasi, analitik penjualan, chatbot layanan pelanggan, dan akses pembiayaan berbasis credit scoring alternatif.';
+                else if(msg.toLowerCase().includes('inklusi')) reply = 'Inklusi keuangan Indonesia mencapai 75.6% pada 2024 (SNLIK OJK). Target pemerintah adalah menjangkau seluruh masyarakat dengan layanan keuangan formal.';
+                body.innerHTML += `<div class="chat-msg bot">${reply}</div>`;
+                body.scrollTop = body.scrollHeight;
+            }, 800);
+        }
+    </script>
+</body>
+</html>
