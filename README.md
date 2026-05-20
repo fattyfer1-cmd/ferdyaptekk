@@ -1,0 +1,2 @@
+# ferdyaptekk
+Ai Edukasi
